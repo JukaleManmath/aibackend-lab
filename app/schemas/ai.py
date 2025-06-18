@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+# Schema models for data validation
 class AiRequest(BaseModel):
     prompt: str
 
