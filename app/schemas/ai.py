@@ -14,3 +14,10 @@ class PasswordResponse(BaseModel):
     suggested_password: str
     explanation: str
 
+class FunctionCallRequest(BaseModel):
+    prompt: str
+
+class FunctionCallResponse(BaseModel):
+    tool_used: str
+    response: str
+
