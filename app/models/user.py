@@ -1,4 +1,4 @@
-from ..database.db import Base
+from app.database.db import Base
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
 from sqlalchemy.sql import func
 from sqlalchemy import Enum as SqlEnum
