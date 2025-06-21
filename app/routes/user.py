@@ -8,7 +8,7 @@ from ..auth.utils import hash_password, verify_password, create_access_token, ge
 from fastapi.security import OAuth2PasswordRequestForm
 from ..auth.role_checker import require_role
 
-router = APIRouter(prefix="/users", tags=["Users CRUD"])
+router = APIRouter(prefix="/users")
 
 @router.post("/register", tags=["register a user"], status_code=status.HTTP_201_CREATED, response_model=list[UserResponse])
 async def create_user(user_data: UserCreate, db: Session = Depends(get_db)):

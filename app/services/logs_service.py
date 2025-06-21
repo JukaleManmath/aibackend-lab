@@ -1,6 +1,7 @@
 import httpx
 from sqlalchemy.orm import Session
 from app.models.logs import LogTable
+from app.vectorstore.embedding_utils import query_logs_from_chroma
 
 async def summarize_log_with_llm(raw_log: str) -> str:
     prompt = f"Summarize the following application log for readability and understanding the main issue: \n\n{raw_log}"
@@ -21,3 +22,6 @@ async def process_log(raw_log: str, db: Session):
     db.commit()
     db.refresh(log_entry)
     return summary
+
+async def semantic_search_logs(query: str):
+    return query_logs_from_chroma(query)

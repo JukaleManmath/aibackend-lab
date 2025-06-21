@@ -35,7 +35,6 @@ async def ask_question_to_llm(prompt: AiRequest):
 
 
 @router.post("/password-feedback", 
-             tags=["Password Feedback"], 
              status_code=status.HTTP_200_OK,
              response_model=PasswordResponse)
 async def get_password_feedback(password: PasswordRequest):
