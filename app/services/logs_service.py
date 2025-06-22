@@ -1,4 +1,5 @@
 import httpx
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.models.logs import LogTable
 from app.vectorstore.embedding_utils import query_logs_from_chroma
@@ -25,3 +26,34 @@ async def process_log(raw_log: str, db: Session):
 
 async def semantic_search_logs(query: str):
     return query_logs_from_chroma(query)
+
+async def answer_log_question(question: str) -> str:
+    top_responses = query_logs_from_chroma(question)
+    formatted_logs = "\n\n".join([f"Log: {log['raw_log']}\nSummary: {log['summary']}" for log in top_responses])
+    
+    prompt = f"""
+            You are a genius Log Analyzer.
+
+            Based on the following logs:
+            {formatted_logs}
+
+            Answer this user question: "{question}"
+
+            Respond in the format:
+            answer: <your concise answer here>
+                """
+    try:
+        async with httpx.AsyncClient(timeout=httpx.Timeout(30.0)) as client:
+            response = await client.post("http://localhost:11434/api/generate",
+                                 json={
+                                     "model": "mistral",
+                                     "prompt": prompt,
+                                     "stream": False
+                                 })
+            
+            data = response.json()
+            raw_answer = data.get("response", data.get("answer", ""))
+            cleaned_answer = raw_answer.replace("answer:", "", 1).strip()
+            return cleaned_answer
+    except:
+        raise HTTPException(status_code=400, detail= "LLM is not responding")

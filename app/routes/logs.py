@@ -1,8 +1,8 @@
 from fastapi import APIRouter, status, Depends
 from sqlalchemy.orm import Session
-from app.schemas.logs import LogRequest, LogResponse
+from app.schemas.logs import LogRequest, LogResponse, LogChatRequest, LogChatResponse
 from app.database.db import get_db
-from app.services.logs_service import process_log ,semantic_search_logs
+from app.services.logs_service import process_log ,semantic_search_logs, answer_log_question
 from app.vectorstore.embedding_utils import add_log_to_chroma
 
 
@@ -19,3 +19,8 @@ async def summarize_log(request: LogRequest, db: Session = Depends(get_db)):
 async def search_relavant_logs(q: str):
     results = await semantic_search_logs(q)
     return results
+
+@router.post("/chat", response_model=LogChatResponse)
+async def chat_with_llm_on_logs(question: LogChatRequest):
+    answer = await answer_log_question(question.question)
+    return {"answer": answer}
