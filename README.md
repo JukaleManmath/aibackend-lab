@@ -1,4 +1,3 @@
-
 # 🧠 AIBackend-Lab — AI-Augmented Backend Playground
 
 AIBackend-Lab is a modular backend system built to explore the integration of modern LLMs into real-world backend architectures using FastAPI, PostgreSQL, Redis, Ollama, and ChromaDB.  
@@ -6,10 +5,10 @@ Developed as part of a 30-day roadmap to become an AI-integrated backend enginee
 
 ---
 
-## 🚀 Features Implemented (Days 1–8)
+## 🚀 Features Implemented 
 
 ### ✅ Core Backend
-- 🔧 **FastAPI + PostgreSQL + Docker**: Production-ready async backend setup
+- 🔧 **FastAPI + PostgreSQL**: Async backend with a modular structure
 - 🔐 **JWT Auth + Role-Based Access Control (RBAC)**: Secure user access system
 
 ### 🤖 LLM-Driven Tools
@@ -34,8 +33,7 @@ Developed as part of a 30-day roadmap to become an AI-integrated backend enginee
 - **Vector Store**: ChromaDB
 - **Database**: PostgreSQL
 - **Realtime**: FastAPI WebSockets
-- **Cache/Broker**: Redis (future integration)
-- **DevOps**: Docker, Docker Compose
+- **DevOps**: (Planned) Docker, Redis
 
 ---
 
@@ -45,14 +43,14 @@ Developed as part of a 30-day roadmap to become an AI-integrated backend enginee
 
 aibackend-lab/
 ├── app/
-│   ├── api/              # Route handlers
-│   ├── core/             # Configs, auth setup
+│   ├── routes/                # Route handlers
+│   ├── auth/                   # auth setup
+│   ├── database/             # database Configs 
 │   ├── services/         # Business logic & AI tools
-│   ├── schemas/          # Pydantic models
-│   └── utils/            # Embedding, streaming, helpers
-├── scripts/              # Data setup & helper scripts
-├── requirements/         # requirements.txt + env files
-├── docker/               # Docker configurations
+│   ├── schemas/            # Pydantic models
+│   │── models/            # database models
+│   └── vectorestore/            # Embedding, streaming, helpers
+├── requirements.txt         # requirements.txt + env files              
 ├── .env.example
 └── README.md
 
@@ -60,29 +58,46 @@ aibackend-lab/
 
 ---
 
-## 🧪 Running Locally
+## 🧪 Running Locally (Without Docker)
 
 ### ⚙️ Prerequisites
-- Python 3.10+
-- Docker + Docker Compose
-- [Ollama installed](https://ollama.com/) locally with a model like `mistral`
 
-### 🚀 Start the App
+- Python 3.10+
+- PostgreSQL installed and running locally
+- [Ollama](https://ollama.com/) installed with a model like `mistral`
+- `virtualenv` or `venv` recommended
+
+### 🚀 Steps
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/JukaleManmath/aibackend-lab.git
 cd aibackend-lab
 
-# 2. Start Docker services
-docker-compose up --build
+# 2. Create virtual environment
+python3 -m venv venv
+source venv/bin/activate
 
-# 3. Run Ollama in another terminal
+# 3. Install dependencies
+pip install -r requirements.txt
+
+# 4. Set up environment variables
+cp .env.example .env
+# Then edit `.env` with your local DB credentials and configs
+
+# 5. Start PostgreSQL manually (if not already running)
+
+# 6. Run Ollama in another terminal
 ollama run mistral
 
-# 4. Access the app
-http://localhost:8000/docs
+# 7. Start the FastAPI server
+uvicorn app.main:app --reload
 ````
+
+### 🔗 API Docs
+
+Once running, visit:
+[http://localhost:8000/docs](http://localhost:8000/docs)
 
 ---
 
@@ -118,6 +133,5 @@ MIT License
 **Manmath Jukale**
 [Portfolio](https://manmath-jukale-portfolio.vercel.app) | [GitHub](https://github.com/JukaleManmath) | [LinkedIn](https://linkedin.com/in/jukalemanmath)
 
-
-
+```
 
