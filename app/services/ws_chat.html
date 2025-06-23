@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Log Chat Test</title>
+</head>
+<body>
+  <h2>Ask Log Questions via WebSocket</h2>
+  <input type="text" id="questionInput" placeholder="Ask a log-related question..." size="60" />
+  <button onclick="sendMessage()">Send</button>
+  <pre id="responseOutput"></pre>
+
+  <script>
+    const socket = new WebSocket("ws://localhost:8000/ws/chat");
+
+    socket.onopen = () => {
+      console.log("WebSocket connection established.");
+    };
+
+    socket.onmessage = (event) => {
+      document.getElementById("responseOutput").textContent = "LLM Answer:\n" + event.data;
+    };
+
+    socket.onclose = () => {
+      console.log("WebSocket closed.");
+    };
+
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+
+    function sendMessage() {
+      const input = document.getElementById("questionInput").value;
+      socket.send(input);
+    }
+  </script>
+</body>
+</html>

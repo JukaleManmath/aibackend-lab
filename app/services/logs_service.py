@@ -3,6 +3,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.models.logs import LogTable
 from app.vectorstore.embedding_utils import query_logs_from_chroma
+import json
 
 async def summarize_log_with_llm(raw_log: str) -> str:
     prompt = f"Summarize the following application log for readability and understanding the main issue: \n\n{raw_log}"
@@ -48,12 +49,21 @@ async def answer_log_question(question: str) -> str:
                                  json={
                                      "model": "mistral",
                                      "prompt": prompt,
-                                     "stream": False
+                                     "stream": True
                                  })
             
-            data = response.json()
-            raw_answer = data.get("response", data.get("answer", ""))
-            cleaned_answer = raw_answer.replace("answer:", "", 1).strip()
-            return cleaned_answer
+            final_text = ""
+            async for line in response.aiter_lines():
+                if not line.strip():
+                    continue
+                try:
+                    data = json.loads(line)
+                    token = data.get("response") or data.get("answer") or ""
+                    final_text += token
+                except json.JSONDecodeError:
+                    continue
+
+            cleaned = final_text.replace("answer:", "", 1).strip()
+            return cleaned
     except:
         raise HTTPException(status_code=400, detail= "LLM is not responding")
