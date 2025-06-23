@@ -10,7 +10,7 @@
 - [x] Day 7: RAG Chat with Logs
 
 ## Week 2 – WebSockets + Real-Time AI
-- [ ] Day 8: WebSocket Stream Chat (Current)
+- [x] Day 8: WebSocket Stream Chat (Current)
 - [ ] Day 9: Resume Ranker with Embeddings
 - [ ] Day 10: Deploy to Render
 - [ ] Day 11: Whisper Voice-to-Text API
