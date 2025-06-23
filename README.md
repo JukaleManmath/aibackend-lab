@@ -133,5 +133,4 @@ MIT License
 **Manmath Jukale**
 [Portfolio](https://manmath-jukale-portfolio.vercel.app) | [GitHub](https://github.com/JukaleManmath) | [LinkedIn](https://linkedin.com/in/jukalemanmath)
 
-```
 
